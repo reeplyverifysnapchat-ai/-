@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>منصة اتخاذ قرار التحصيل الذكي – CPF™</title>
+<style>
+:root{--pri:#1e3a8a;--acc:#2563eb;--ok:#059669;--warn:#d97706;--bad:#dc2626;--bg:#f8fafc;--card:#fff;--tx:#0f172a;--mut:#64748b;--bd:#e2e8f0;--soft:#f1f5f9;--logbg:#0f172a;--logtx:#38bdf8;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--pri:#1e40af;--acc:#3b82f6;--bg:#0b1220;--card:#131c2e;--tx:#e5e7eb;--mut:#94a3b8;--bd:#25324a;--soft:#1a2539;--logbg:#050a14}}
+:root[data-theme="dark"]{--pri:#1e40af;--acc:#3b82f6;--bg:#0b1220;--card:#131c2e;--tx:#e5e7eb;--mut:#94a3b8;--bd:#25324a;--soft:#1a2539;--logbg:#050a14}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;padding:14px;background:var(--bg);color:var(--tx);font-family:'Segoe UI',Tahoma,Arial,sans-serif;line-height:1.6}
+.wrap{max-width:1000px;margin:auto}
+.hdr{background:var(--pri);color:#fff;border-radius:12px;padding:16px;margin-bottom:12px}
+.hdr h1{margin:0 0 4px;font-size:1.25rem}
+.hdr p{margin:0;opacity:.85;font-size:.85rem}
+.status{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;font-size:.8rem}
+.pill{background:rgba(255,255,255,.15);border-radius:20px;padding:3px 12px}
+.pill b{font-weight:700}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#94a3b8;margin-inline-end:6px}
+.dot.run{background:#34d399;animation:p 1s infinite}
+@keyframes p{50%{opacity:.3}}
+.stepper{display:flex;gap:6px;overflow-x:auto;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:10px;margin-bottom:12px}
+.st{flex:1;min-width:92px;text-align:center;padding:8px 4px;border-radius:8px;background:var(--soft);font-size:.78rem;font-weight:700;color:var(--mut);cursor:default;transition:.3s}
+.st.active{background:var(--acc);color:#fff}
+.st.done{background:var(--ok);color:#fff;cursor:pointer}
+.st.view{outline:2px solid var(--warn)}
+.panel{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:18px;min-height:340px}
+h2{margin:0 0 4px;font-size:1.1rem}
+.sub{color:var(--mut);font-size:.82rem;margin-bottom:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+label{display:block;font-weight:600;font-size:.85rem;margin-bottom:4px}
+input,select{width:100%;padding:9px;border:1px solid var(--bd);border-radius:6px;background:var(--card);color:var(--tx);font:inherit}
+.btn{padding:10px 16px;border:0;border-radius:8px;background:var(--acc);color:#fff;font:inherit;font-weight:700;cursor:pointer}
+.btn.sec{background:var(--soft);color:var(--tx);border:1px solid var(--bd)}
+.btn:hover{filter:brightness(.92)}
+.full{grid-column:1/-1}
+.ctrl{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:12px 0;font-size:.85rem}
+.ctrl select{width:auto}
+.card{background:var(--soft);border:1px solid var(--bd);border-radius:8px;padding:12px;margin-bottom:10px}
+.row{display:flex;align-items:center;gap:10px;margin:6px 0;font-size:.85rem}
+.row .n{min-width:130px}
+.bar{flex:1;height:10px;background:var(--bd);border-radius:6px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--acc);border-radius:6px}
+.bar i.top{background:var(--ok)}
+.row .v{min-width:38px;text-align:left;font-weight:700}
+.big{font-size:2.6rem;font-weight:800;color:var(--acc);line-height:1.1}
+.tag{display:inline-block;padding:2px 10px;border-radius:12px;font-size:.75rem;font-weight:700;color:#fff}
+.t-ok{background:var(--ok)}.t-w{background:var(--warn)}.t-b{background:var(--bad)}
+table{width:100%;border-collapse:collapse;font-size:.85rem}
+.tw{overflow-x:auto}
+th,td{padding:7px 8px;border-bottom:1px solid var(--bd);text-align:right}
+th{color:var(--mut);font-weight:600}
+.log{background:var(--logbg);color:var(--logtx);font-family:monospace;font-size:.78rem;border-radius:8px;padding:10px;margin-top:14px;max-height:130px;overflow-y:auto;direction:rtl}
+.note{font-size:.75rem;color:var(--mut);margin-top:10px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.kpi{background:var(--soft);border:1px solid var(--bd);border-radius:8px;padding:10px;text-align:center}
+.kpi b{display:block;font-size:1.4rem;color:var(--acc)}
+.kpi span{font-size:.75rem;color:var(--mut)}
+.fade{animation:f .4s}
+@keyframes f{from{opacity:0;transform:translateY(6px)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="hdr">
+  <h1>منصة اتخاذ قرار التحصيل الذكي (CPF™ Engine)</h1>
+  <p>تطبيق صفحة واحدة يدير دورة التحصيل الآلية عبر 12 مرحلة – نموذج تجريبي ببيانات وهمية</p>
+  <div class="status">
+    <span class="pill"><span class="dot" id="dot"></span><b id="sys">في الانتظار</b></span>
+    <span class="pill">الحساب: <b id="hAcc">—</b></span>
+    <span class="pill">المديونية: <b id="hDebt">—</b></span>
+    <span class="pill">الجاهزية: <b id="hReady">—</b></span>
+  </div>
+</div>
+
+<div class="stepper" id="stepper"></div>
+
+<div class="panel" id="panel">
+  <div id="s1">
+    <h2>الشاشة 1: استلام بيانات العميل</h2>
+    <div class="sub">جميع القيم الافتراضية وهمية. عدّلها لترى كيف تتغير المخرجات في المراحل التالية.</div>
+    <form id="form">
+      <div class="grid">
+        <div><label>اسم العميل</label><input id="name" value="عميل أ" required></div>
+        <div><label>رقم الحساب</label><input id="acc" value="ACC-00001" required></div>
+        <div><label>المنتج</label><select id="prod"><option>تمويل شخصي</option><option>بطاقة ائتمانية</option><option>تمويل سيارة</option></select></div>
+        <div><label>المديونية (ريال)</label><input id="debt" type="number" min="0" value="45000" required></div>
+        <div><label>أيام التأخر</label><input id="late" type="number" min="0" value="90" required></div>
+        <div><label>حالة الحساب</label><select id="wo"><option value="no">قائم (غير مشطوب)</option><option value="yes">مشطوب</option></select></div>
+        <div><label>آخر سداد (قبل كم شهر)</label><input id="lastpay" type="number" min="0" value="3" required></div>
+        <div><label>وعود السداد السابقة</label><select id="prom"><option value="none">لا توجد</option><option value="broken" selected>وعد غير موفى</option><option value="kept">وعد موفى</option></select></div>
+        <div><label>الاستجابة للتواصل</label><select id="resp"><option value="good">تستجيب</option><option value="part" selected>استجابة جزئية</option><option value="none">لا تستجيب</option></select></div>
+        <div><label>استقرار الدخل</label><select id="inc"><option value="stable">مستقر</option><option value="irr" selected>غير منتظم</option><option value="none">لا دخل حالي</option></select></div>
+        <div><label>الإجراء القانوني / التنفيذي</label><select id="legal"><option value="no">لا توجد قضية</option><option value="yes">تحت الإجراء التنفيذي</option></select></div>
+        <div><label>المحفظة / الإسناد</label><select id="pf"><option>محفظة الأفراد – فريق 1</option><option>محفظة الأفراد – فريق 2</option></select></div>
+        <div class="full"><button class="btn" type="submit" style="width:100%">حفظ وبدء الدورة الآلية 🚀</button></div>
+      </div>
+    </form>
+  </div>
+  <div id="auto" style="display:none">
+    <h2 id="tt"></h2><div class="sub" id="ts"></div>
+    <div id="body" class="fade"></div>
+    <div class="ctrl" id="ctrl">
+      <button class="btn sec" id="pause">إيقاف مؤقت</button>
+      <button class="btn sec" id="next">المرحلة التالية</button>
+      <label style="margin:0">السرعة:</label>
+      <select id="spd"><option value="3000">بطيئة</option><option value="1800" selected>عادية</option><option value="800">سريعة</option></select>
+      <button class="btn sec" id="restart">دورة جديدة</button>
+    </div>
+    <div class="log" id="log"></div>
+  </div>
+</div>
+<div class="note">المخرجات المعروضة في المراحل 10–12 محاكاة لأغراض العرض فقط، والشخصيات وأوزان الدرجة قابلة للتعديل.</div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const fmt=n=>Number(n).toLocaleString('ar-SA');
+const clamp=x=>Math.max(0,Math.min(100,Math.round(x)));
+const PERSONAS=[
+ ['CP-01','متعثر مؤقتًا وراغب في السداد'],['CP-02','راغب بلا قدرة حالية'],['CP-03','قادر ومماطل'],['CP-04','منقطع التواصل'],
+ ['CP-05','كثير الوعود قليل الوفاء'],['CP-06','يحتاج إعادة جدولة / هيكلة'],['CP-07','متنازع أو تحت إجراء قانوني'],['CP-08','مرتفع المخاطر / مشطوب']];
+const ACTIONS={
+ 'CP-01':['تذكير ودي مع رابط سداد فوري','رسالة نصية + اتصال لطيف','SMS + اتصال'],
+ 'CP-02':['عرض تسوية مخفضة مع جدولة طويلة','اتصال من محصل متخصص','اتصال + عرض رقمي'],
+ 'CP-03':['إنذار رسمي مع مهلة قصيرة','اتصال حازم + إشعار مكتوب','اتصال + خطاب'],
+ 'CP-04':['محاولة وصول عبر قنوات بديلة','رسالة + مراسلة جهة اتصال بديلة','قنوات متعددة'],
+ 'CP-05':['وعد موثق بدفعة مقدمة صغيرة','اتصال متابعة قبل الاستحقاق بيوم','اتصال + تذكير'],
+ 'CP-06':['عرض إعادة هيكلة مع إشعار تفاعلي','اتصال محصل + عرض رقمي','عرض رقمي + اتصال'],
+ 'CP-07':['إيقاف التواصل التلقائي وإحالة للقانونية','مراجعة من مشرف','داخلي'],
+ 'CP-08':['مراجعة المحفظة المشطوبة وتحديد أولوية الاسترداد','إحالة لفريق الاسترداد','داخلي']};
+let D,C,timer,paused,idx,html,names;
+
+function collect(){
+  const v=id=>$(id).value;
+  return {name:v('name'),acc:v('acc'),prod:v('prod'),debt:+v('debt'),late:+v('late'),wo:v('wo'),lastpay:+v('lastpay'),prom:v('prom'),resp:v('resp'),inc:v('inc'),legal:v('legal'),pf:v('pf')};
+}
+function analyze(d){
+  const cap=d.inc==='stable'?80:d.inc==='irr'?50:15;
+  const will=(d.resp==='good'?75:d.resp==='part'?50:15)+(d.prom==='kept'?20:d.prom==='broken'?-10:0);
+  const rec=clamp(100-d.lastpay*12);
+  const aging=clamp(100-d.late*0.9);
+  const dims=[['المالية (القدرة)',clamp(cap)],['السلوكية (الاستعداد)',clamp(will)],['التفاعلية (الاستجابة)',d.resp==='good'?85:d.resp==='part'?50:12],
+    ['الديموغرافية',65],['التحصيلية (حداثة السداد)',rec],['القانونية',d.legal==='yes'?20:90],['الزمنية (عمر التأخر)',aging]];
+  const sc=[
+   (cap>60?30:10)+will*.4+aging*.3,
+   (cap<40?45:10)+(will>50?35:5)+(d.legal==='no'?10:0),
+   (cap>=70?45:5)+(will<45?30:5)+(d.resp!=='good'?10:0),
+   (d.resp==='none'?70:10)+(d.lastpay>=6?15:0),
+   (d.prom==='broken'?60:8)+(d.resp!=='none'?15:0)+(d.late>30?8:0),
+   (cap>=40&&cap<75?30:8)+(will>=45?25:8)+(d.late>=60?20:5)+(d.debt>=20000?12:3),
+   d.legal==='yes'?92:5,
+   (d.wo==='yes'?90:6)+(d.late>=180?15:0)];
+  const scores=sc.map(clamp);
+  let top=0;scores.forEach((s,i)=>{if(s>scores[top])top=i});
+  if(d.legal==='yes')top=6; if(d.wo==='yes')top=7;
+  const ready=[
+   ['اكتمال البيانات الأساسية',d.name&&d.acc&&d.debt>0],
+   ['حداثة بيانات السداد (آخر 6 أشهر)',d.lastpay<=6],
+   ['حالة الحساب قابلة للتحصيل',d.wo!=='yes'],
+   ['لا وعود قائمة معلّقة',d.prom!=='broken'||true],
+   ['لا إجراء قانوني معلّق',d.legal!=='yes']];
+  const rp=Math.round(ready.filter(r=>r[1]).length/ready.length*100);
+  return {dims,scores,top,ready,rp,score:scores[top]};
+}
+const events=d=>[[d.late+30,'فتح الحساب / آخر قسط منتظم'],[d.late,'أول تأخر عن السداد'],[Math.max(d.lastpay*30,1),'آخر سداد مسجل'],[Math.max(Math.round(d.late/2),1),'محاولة تواصل أولى'],[7,'وعد سداد مسجل: '+({none:'لا يوجد',broken:'لم يُوفَ به',kept:'تم الوفاء به'}[d.prom])]].sort((a,b)=>b[0]-a[0]);
+
+const ST=[
+ {n:'الإدخال',t:'استلام البيانات',en:'Data Intake'},
+ {n:'التوحيد',t:'توحيد المصادر',en:'Data Unification',r:()=>{
+   const rows=[['اسم العميل',D.name],['رقم الحساب',D.acc],['المنتج',D.prod],['المديونية',fmt(D.debt)+' ريال'],['أيام التأخر',D.late],['حالة الحساب',D.wo==='yes'?'مشطوب':'قائم'],['المحفظة',D.pf]];
+   return `<div class="card">تم ربط الحقول وتوحيد الصيغ ومعالجة التكرار. لا تعارضات بين المصادر.</div><div class="tw"><table><tr><th>الحقل</th><th>القيمة الموحدة</th><th>التحقق</th></tr>${rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td><span class="tag t-ok">✓</span></td></tr>`).join('')}</table></div>
+   <h3 style="font-size:.95rem">السجل الزمني الموحد</h3><div class="tw"><table>${events(D).map(e=>`<tr><td>قبل ${e[0]} يومًا</td><td>${e[1]}</td></tr>`).join('')}</table></div>`}},
+ {n:'الفهم',t:'بناء فهم العميل',en:'Customer Understanding',r:()=>`<div class="card"><b>الوضع المالي:</b> مديونية ${fmt(D.debt)} ريال على ${D.prod}، متأخرة ${D.late} يومًا، والدخل ${({stable:'مستقر',irr:'غير منتظم',none:'غير متوفر حاليًا'})[D.inc]}.</div>
+   <div class="card"><b>تاريخ السداد:</b> آخر سداد قبل ${D.lastpay} أشهر، والوعود السابقة: ${({none:'لا توجد',broken:'غير موفى بها',kept:'موفى بها'})[D.prom]}.</div>
+   <div class="card"><b>الاستجابة للتواصل:</b> ${({good:'تستجيب بانتظام',part:'استجابة جزئية',none:'لا تستجيب'})[D.resp]}. ${D.legal==='yes'?'<b>تنبيه:</b> هناك إجراء تنفيذي قائم.':''}</div>`},
+ {n:'الأبعاد',t:'تحليل أبعاد العميل',en:'Dimensions Analysis',r:()=>`<div class="card">${C.dims.map(d=>`<div class="row"><span class="n">${d[0]}</span><div class="bar"><i style="width:${d[1]}%"></i></div><span class="v">${d[1]}</span></div>`).join('')}</div><div class="note">سبعة أبعاد تُغذّي مطابقة الشخصية ودرجتها.</div>`},
+ {n:'المطابقة',t:'مطابقة الشخصية',en:'Persona Matching',r:()=>`<div class="card">${PERSONAS.map((p,i)=>`<div class="row"><span class="n">${p[0]} ${p[1]}</span><div class="bar"><i class="${i===C.top?'top':''}" style="width:${C.scores[i]}%"></i></div><span class="v">${C.scores[i]}</span></div>`).join('')}</div><div class="card"><b>الشخصية المتوافقة:</b> ${PERSONAS[C.top][0]} – ${PERSONAS[C.top][1]}</div>`},
+ {n:'الدرجة',t:'درجة الشخصية',en:'Persona Score',r:()=>{const b=C.score>=75?['مطابقة عالية','t-ok']:C.score>=50?['مطابقة متوسطة','t-w']:['مطابقة منخفضة – تحتاج مراجعة','t-b'];return `<div class="card" style="text-align:center"><div class="big">${C.score}<small style="font-size:1rem"> / 100</small></div><span class="tag ${b[1]}">${b[0]}</span><p>الشخصية: ${PERSONAS[C.top][0]} – ${PERSONAS[C.top][1]}</p></div>`}},
+ {n:'الجاهزية',t:'التحقق من جاهزية القرار',en:'Decision Readiness',r:()=>`<div class="card">${C.ready.map(r=>`<div class="row"><span class="tag ${r[1]?'t-ok':'t-b'}">${r[1]?'✓':'✗'}</span><span>${r[0]}</span></div>`).join('')}</div><div class="card" style="text-align:center"><div class="big">${C.rp}%</div>${C.rp>=80?'جاهز لاتخاذ القرار':'يحتاج مراجعة قبل التنفيذ'}</div>`},
+ {n:'المحرك',t:'محرك القرار',en:'Decision Engine',r:()=>{const rules=[];
+   if(D.legal==='yes')rules.push('R1: إجراء تنفيذي قائم ← إيقاف التواصل التلقائي ومراجعة بشرية');
+   if(D.wo==='yes')rules.push('R2: حساب مشطوب ← مسار الاسترداد');
+   if(D.resp==='none')rules.push('R3: لا استجابة ← قنوات بديلة');
+   if(D.prom==='broken')rules.push('R4: وعد غير موفى ← اشتراط دفعة مقدمة');
+   if(D.late>=60&&D.legal!=='yes')rules.push('R5: تأخر ≥ 60 يومًا ← تفضيل عرض هيكلة / تسوية');
+   rules.push('R6: الشخصية '+PERSONAS[C.top][0]+' بدرجة '+C.score+' ← اختيار المسار المناسب');
+   return `<div class="card"><b>القواعد المُفعَّلة:</b><ul>${rules.map(r=>`<li>${r}</li>`).join('')}</ul></div><div class="card"><b>المسار المحدد:</b> ${ACTIONS[PERSONAS[C.top][0]][1]}</div>`}},
+ {n:'التوصية',t:'أفضل إجراء تحصيلي تالٍ',en:'Next Best Action',r:()=>{const a=ACTIONS[PERSONAS[C.top][0]];return `<div class="card" style="border-color:var(--acc)"><span class="tag t-ok">التوصية</span><h3 style="margin:8px 0">${a[0]}</h3><div>القناة المقترحة: ${a[2]}</div><div>الأساس: ${PERSONAS[C.top][0]} – درجة ${C.score} – جاهزية ${C.rp}%</div></div>`}},
+ {n:'التنفيذ',t:'التنفيذ والتوثيق',en:'Execution',r:()=>{const a=ACTIONS[PERSONAS[C.top][0]];const dt=new Date().toLocaleDateString('ar-SA');return `<div class="tw"><table><tr><th>التاريخ</th><th>الإجراء</th><th>القناة</th><th>النتيجة (محاكاة)</th></tr><tr><td>${dt}</td><td>${a[0]}</td><td>${a[2]}</td><td>تم الإرسال / التنفيذ</td></tr></table></div><div class="card" style="margin-top:10px">وعد السداد المسجل: دفعة أولى خلال 7 أيام (محاكاة).</div>`}},
+ {n:'القياس',t:'قياس النتائج',en:'Outcome Measurement',r:()=>{const paid=Math.round(D.debt*0.1);return `<div class="kpis"><div class="kpi"><b>${fmt(paid)}</b><span>المبلغ المحصل (ريال)</span></div><div class="kpi"><b>${D.resp==='none'?'0%':'100%'}</b><span>معدل الاستجابة</span></div><div class="kpi"><b>${D.prom==='broken'?'50%':'100%'}</b><span>الالتزام بالوعود</span></div><div class="kpi"><b>${C.rp>=80?'عالية':'متوسطة'}</b><span>كفاءة الإجراء</span></div></div><div class="note">قيم محاكاة لأغراض العرض.</div>`}},
+ {n:'التحديث',t:'التعلّم والتحديث',en:'Learning & Update',r:()=>`<div class="card">✓ تم تحديث سجل العميل ${D.acc} بنتيجة الإجراء.</div><div class="card">✓ مراجعة الشخصية: بقاء ${PERSONAS[C.top][0]} مع درجة ${Math.min(100,C.score+2)} بعد الدورة.</div><div class="card">✓ تغذية محرك القرار بنتيجة الدورة لتحسين القواعد في الدورات اللاحقة.</div>`}
+];
+
+function buildStepper(){$('stepper').innerHTML=ST.map((s,i)=>`<div class="st" id="st${i}">${i+1}. ${s.n}</div>`).join('');
+  ST.forEach((s,i)=>$('st'+i).onclick=()=>{if($('st'+i).classList.contains('done')||i===idx-1)show(i,true)})}
+function setSt(cur){ST.forEach((s,i)=>{$('st'+i).className='st'+(i<cur?' done':i===cur?' active':'')})}
+function log(m){const l=$('log');l.innerHTML+=`[${new Date().toLocaleTimeString('ar-SA')}] ${m}<br>`;l.scrollTop=l.scrollHeight}
+function show(i,review){
+  $('tt').textContent=`الشاشة ${i+1}: ${ST[i].t} | ${ST[i].en}`;
+  $('ts').textContent=review?'عرض مرحلة سابقة (انقر مرحلة أخرى أو انتظر المتابعة)':'';
+  $('body').innerHTML=html[i]||'';$('body').className='';void $('body').offsetWidth;$('body').className='fade';
+  document.querySelectorAll('.st').forEach(e=>e.classList.remove('view'));if(review)$('st'+i).classList.add('view');
+}
+function step(){
+  clearTimeout(timer);
+  if(idx>=ST.length){finish();return}
+  const i=idx;
+  html[i]=ST[i].r();setSt(i);show(i,false);
+  if(i===1)$('hReady').textContent='جارٍ الفحص';
+  if(i===6)$('hReady').textContent=C.rp+'%';
+  log(`اكتملت المرحلة ${i+1}: ${ST[i].t}`);
+  idx++;
+  if(!paused)timer=setTimeout(step,+$('spd').value);
+}
+function finish(){setSt(ST.length);$('sys').textContent='اكتملت الدورة';$('dot').className='dot';$('ts').textContent='✅ اكتملت الدورة الآلية للمراحل الـ 12. يمكنك مراجعة أي مرحلة بالنقر عليها.';$('pause').disabled=true;$('next').disabled=true;log('انتهت الدورة')}
+function start(e){
+  e.preventDefault();D=collect();C=analyze(D);
+  $('s1').style.display='none';$('auto').style.display='block';
+  $('hAcc').textContent=D.acc;$('hDebt').textContent=fmt(D.debt)+' ريال';$('hReady').textContent='—';
+  $('sys').textContent='معالجة تتابع آلي';$('dot').className='dot run';
+  html=[];idx=1;paused=false;$('log').innerHTML='';$('pause').textContent='إيقاف مؤقت';$('pause').disabled=false;$('next').disabled=false;
+  html[0]=`<div class="card">تم حفظ بيانات العميل <b>${D.name}</b> (${D.acc}) وبدء الدورة الآلية.</div>`;
+  log('حفظ البيانات وبدء الدورة');
+  timer=setTimeout(step,900);
+}
+$('form').addEventListener('submit',start);
+$('pause').onclick=()=>{paused=!paused;$('pause').textContent=paused?'متابعة':'إيقاف مؤقت';$('sys').textContent=paused?'متوقف مؤقتًا':'معالجة تتابع آلي';$('dot').className=paused?'dot':'dot run';if(!paused)timer=setTimeout(step,300)};
+$('next').onclick=()=>{step()};
+$('restart').onclick=()=>{clearTimeout(timer);$('auto').style.display='none';$('s1').style.display='block';buildStepper();setSt(0);$('sys').textContent='في الانتظار';$('dot').className='dot'};
+buildStepper();setSt(0);
+</script>
+</body>
+</html>

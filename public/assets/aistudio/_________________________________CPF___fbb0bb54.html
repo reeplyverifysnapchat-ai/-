@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>منصة اتخاذ قرار التحصيل الذكي – CPF™</title>
+<style>
+:root{--pri:#1e3a8a;--acc:#2563eb;--ok:#059669;--warn:#d97706;--bad:#dc2626;--bg:#f8fafc;--card:#fff;--tx:#0f172a;--mut:#64748b;--bd:#e2e8f0;--soft:#f1f5f9;--logbg:#0f172a;--logtx:#38bdf8;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--pri:#1e40af;--acc:#3b82f6;--bg:#0b1220;--card:#131c2e;--tx:#e5e7eb;--mut:#94a3b8;--bd:#25324a;--soft:#1a2539;--logbg:#050a14}}
+:root[data-theme="dark"]{--pri:#1e40af;--acc:#3b82f6;--bg:#0b1220;--card:#131c2e;--tx:#e5e7eb;--mut:#94a3b8;--bd:#25324a;--soft:#1a2539;--logbg:#050a14}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;padding:14px;background:var(--bg);color:var(--tx);font-family:'Segoe UI',Tahoma,Arial,sans-serif;line-height:1.6}
+.wrap{max-width:1000px;margin:auto}
+.hdr{background:var(--pri);color:#fff;border-radius:12px;padding:16px;margin-bottom:12px}
+.hdr h1{margin:0 0 4px;font-size:1.25rem}
+.hdr p{margin:0;opacity:.85;font-size:.85rem}
+.status{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;font-size:.8rem}
+.pill{background:rgba(255,255,255,.15);border-radius:20px;padding:3px 12px}
+.pill b{font-weight:700}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#94a3b8;margin-inline-end:6px}
+.dot.run{background:#34d399;animation:p 1s infinite}
+@keyframes p{50%{opacity:.3}}
+.stepper{display:flex;gap:6px;overflow-x:auto;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:10px;margin-bottom:12px}
+.st{flex:1;min-width:92px;text-align:center;padding:8px 4px;border-radius:8px;background:var(--soft);font-size:.78rem;font-weight:700;color:var(--mut);cursor:default;transition:.3s}
+.st.active{background:var(--acc);color:#fff}
+.st.done{background:var(--ok);color:#fff;cursor:pointer}
+.st.view{outline:2px solid var(--warn)}
+.panel{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:18px;min-height:340px}
+h2{margin:0 0 4px;font-size:1.1rem}
+.sub{color:var(--mut);font-size:.82rem;margin-bottom:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+label{display:block;font-weight:600;font-size:.85rem;margin-bottom:4px}
+input,select{width:100%;padding:9px;border:1px solid var(--bd);border-radius:6px;background:var(--card);color:var(--tx);font:inherit}
+.btn{padding:10px 16px;border:0;border-radius:8px;background:var(--acc);color:#fff;font:inherit;font-weight:700;cursor:pointer}
+.btn.sec{background:var(--soft);color:var(--tx);border:1px solid var(--bd)}
+.btn:hover{filter:brightness(.92)}
+.full{grid-column:1/-1}
+.ctrl{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:12px 0;font-size:.85rem}
+.ctrl select{width:auto}
+.card{background:var(--soft);border:1px solid var(--bd);border-radius:8px;padding:12px;margin-bottom:10px}
+.row{display:flex;align-items:center;gap:10px;margin:6px 0;font-size:.85rem}
+.row .n{min-width:130px}
+.bar{flex:1;height:10px;background:var(--bd);border-radius:6px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--acc);border-radius:6px}
+.bar i.top{background:var(--ok)}
+.row .v{min-width:38px;text-align:left;font-weight:700}
+.big{font-size:2.6rem;font-weight:800;color:var(--acc);line-height:1.1}
+.tag{display:inline-block;padding:2px 10px;border-radius:12px;font-size:.75rem;font-weight:700;color:#fff}
+.t-ok{background:var(--ok)}.t-w{background:var(--warn)}.t-b{background:var(--bad)}
+table{width:100%;border-collapse:collapse;font-size:.85rem}
+.tw{overflow-x:auto}
+th,td{padding:7px 8px;border-bottom:1px solid var(--bd);text-align:right}
+th{color:var(--mut);font-weight:600}
+.log{background:var(--logbg);color:var(--logtx);font-family:monospace;font-size:.78rem;border-radius:8px;padding:10px;margin-top:14px;max-height:130px;overflow-y:auto;direction:rtl}
+.note{font-size:.75rem;color:var(--mut);margin-top:10px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.kpi{background:var(--soft);border:1px solid var(--bd);border-radius:8px;padding:10px;text-align:center}
+.kpi b{display:block;font-size:1.4rem;color:var(--acc)}
+.kpi span{font-size:.75rem;color:var(--mut)}
+.tabs{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}.tab{padding:9px 16px;border-radius:8px;border:1px solid var(--bd);background:var(--card);color:var(--tx);font:inherit;font-weight:700;cursor:pointer}.tab.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+#utMode .panel{margin-bottom:12px;min-height:0}.radios{display:flex;flex-wrap:wrap;gap:12px}.radios label{display:flex;gap:6px;align-items:center;font-weight:500;margin:0}.radios input{width:auto}
+.sw{font-size:1.6rem;font-weight:800;font-family:monospace;direction:ltr;display:inline-block;min-width:80px}.msg{font-size:.82rem;margin-top:8px;color:var(--bad)}.msg.ok{color:var(--ok)}.mark{position:relative;height:14px;background:var(--bd);border-radius:7px;margin:10px 0}.mark i{display:block;height:100%;border-radius:7px;background:var(--acc)}.mark b{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--bad)}.kpi.big2 b{font-size:1.1rem}
+.fade{animation:f .4s}
+@keyframes f{from{opacity:0;transform:translateY(6px)}}
+.tabs{display:flex;gap:8px;align-items:center;flex-wrap:wrap;position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding:6px 0;margin-bottom:8px}
+.tab{padding:9px 14px;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--tx);font:inherit;font-weight:700;cursor:pointer}
+.tab.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.clock{margin-inline-start:auto;display:flex;gap:6px;align-items:center;font-size:.85rem;background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:4px 8px}
+.clock b{font-variant-numeric:tabular-nums;font-size:1.05rem}
+.mini{padding:4px 10px;font-size:.8rem}
+textarea{width:100%;padding:9px;border:1px solid var(--bd);border-radius:6px;background:var(--card);color:var(--tx);font:inherit}
+input[type=checkbox]{width:auto}
+.msg{font-size:.85rem;margin:8px 0;min-height:1.2em;font-weight:600}
+h3.s{font-size:.98rem;margin:18px 0 8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="hdr">
+  <h1>منصة اتخاذ قرار التحصيل الذكي (CPF™ Engine)</h1>
+  <p>تطبيق صفحة واحدة يدير دورة التحصيل الآلية عبر 12 مرحلة – نموذج تجريبي ببيانات وهمية</p>
+  <div class="status">
+    <span class="pill"><span class="dot" id="dot"></span><b id="sys">في الانتظار</b></span>
+    <span class="pill">الحساب: <b id="hAcc">—</b></span>
+    <span class="pill">المديونية: <b id="hDebt">—</b></span>
+    <span class="pill">الجاهزية: <b id="hReady">—</b></span>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab on" id="tabCpf" type="button">نموذج CPF</button>
+  <button class="tab" id="tabUx" type="button">اختبار قابلية الاستخدام</button>
+  <div class="clock" title="مؤقت المراقب">⏱ <b id="tm">00:00</b>
+    <button class="btn sec mini" id="tStart" type="button">بدء</button>
+    <button class="btn sec mini" id="tStop" type="button">إيقاف</button>
+    <button class="btn sec mini" id="tReset" type="button">تصفير</button></div>
+</div>
+<div id="cpfMode">
+<div class="tabs"><button class="tab on" id="tabCpf" type="button">نموذج CPF</button><button class="tab" id="tabUt" type="button">اختبار قابلية الاستخدام – Usability Testing</button></div>
+<div class="stepper" id="stepper"></div>
+
+<div class="panel" id="panel">
+  <div id="s1">
+    <h2>الشاشة 1: استلام بيانات العميل</h2>
+    <div class="sub">جميع القيم الافتراضية وهمية. عدّلها لترى كيف تتغير المخرجات في المراحل التالية.</div>
+    <form id="form">
+      <div class="grid">
+        <div><label>اسم العميل</label><input id="name" value="عميل أ" required></div>
+        <div><label>رقم الحساب</label><input id="acc" value="ACC-00001" required></div>
+        <div><label>المنتج</label><select id="prod"><option>تمويل شخصي</option><option>بطاقة ائتمانية</option><option>تمويل سيارة</option></select></div>
+        <div><label>المديونية (ريال)</label><input id="debt" type="number" min="0" value="45000" required></div>
+        <div><label>أيام التأخر</label><input id="late" type="number" min="0" value="90" required></div>
+        <div><label>حالة الحساب</label><select id="wo"><option value="no">قائم (غير مشطوب)</option><option value="yes">مشطوب</option></select></div>
+        <div><label>آخر سداد (قبل كم شهر)</label><input id="lastpay" type="number" min="0" value="3" required></div>
+        <div><label>وعود السداد السابقة</label><select id="prom"><option value="none">لا توجد</option><option value="broken" selected>وعد غير موفى</option><option value="kept">وعد موفى</option></select></div>
+        <div><label>الاستجابة للتواصل</label><select id="resp"><option value="good">تستجيب</option><option value="part" selected>استجابة جزئية</option><option value="none">لا تستجيب</option></select></div>
+        <div><label>استقرار الدخل</label><select id="inc"><option value="stable">مستقر</option><option value="irr" selected>غير منتظم</option><option value="none">لا دخل حالي</option></select></div>
+        <div><label>الإجراء القانوني / التنفيذي</label><select id="legal"><option value="no">لا توجد قضية</option><option value="yes">تحت الإجراء التنفيذي</option></select></div>
+        <div><label>المحفظة / الإسناد</label><select id="pf"><option>محفظة الأفراد – فريق 1</option><option>محفظة الأفراد – فريق 2</option></select></div>
+        <div class="full"><button class="btn" type="submit" style="width:100%">حفظ وبدء الدورة الآلية 🚀</button></div>
+      </div>
+    </form>
+  </div>
+  <div id="auto" style="display:none">
+    <h2 id="tt"></h2><div class="sub" id="ts"></div>
+    <div id="body" class="fade"></div>
+    <div class="ctrl" id="ctrl">
+      <button class="btn sec" id="pause">إيقاف مؤقت</button>
+      <button class="btn sec" id="next">المرحلة التالية</button>
+      <label style="margin:0">السرعة:</label>
+      <select id="spd"><option value="3000">بطيئة</option><option value="1800" selected>عادية</option><option value="800">سريعة</option></select>
+      <button class="btn sec" id="restart">دورة جديدة</button>
+    </div>
+    <div class="log" id="log"></div>
+  </div>
+</div>
+<div id="utMode" style="display:none">
+<div class="panel"><h2>اختبار قابلية الاستخدام – Usability Testing</h2><div class="sub">قياس قدرة أخصائي التحصيل على إنجاز المهام الأساسية بالنموذج الأولي دون مساعدة – المؤشر الرئيسي في SURGE CUP 2026</div>
+<div class="kpis"><div class="kpi"><b>3+</b><span>أخصائيو تحصيل (P1–P3 على الأقل)</span></div><div class="kpi"><b>3</b><span>مهام لكل مشارك</span></div><div class="kpi"><b>9</b><span>محاولات مستهدفة</span></div><div class="kpi"><b>80%</b><span>الهدف (8 من 9 على الأقل)</span></div></div>
+<div class="note">وظائف CPF ومعادلات التصنيف والأوزان وقواعد المحرك لم تتغير. هذا الوضع لا يولّد أي نتيجة تلقائيًا: كل سجل يُدخله المراقب بعد أن ينفذ أخصائي التحصيل المهمة فعليًا دون مساعدة.</div></div>
+<div class="panel"><h2>مهام الاختبار</h2><div class="sub">اطلب من المشارك تنفيذ المهمة في تبويب «نموذج CPF» دون تدخل، ثم سجّل النتيجة أدناه.</div><div id="utTasks"></div><button class="btn sec" type="button" id="utOpen">فتح النموذج للمشارك</button></div>
+<div class="panel"><h2>تسجيل محاولة</h2><div class="sub">استخدم رموز المشاركين فقط (دون أسماء حقيقية). كل مشارك يُسجَّل له محاولة واحدة لكل مهمة.</div>
+<form id="utForm"><div class="grid">
+<div><label>رمز المشارك</label><select id="utP"><option value="">اختر…</option><option>P1</option><option>P2</option><option>P3</option><option>P4</option><option>P5</option></select></div>
+<div><label>المهمة</label><select id="utT"><option value="">اختر…</option><option value="1">المهمة 1: إدخال البيانات وتشغيل التحليل</option><option value="2">المهمة 2: الشخصية الناتجة ومبرراتها</option><option value="3">المهمة 3: التوصية وأسباب اختيارها</option></select></div>
+<div class="full"><label>حالة النتيجة</label><div class="radios"><label><input type="radio" name="utS" value="success">أنجز المهمة بنجاح دون مساعدة</label><label><input type="radio" name="utS" value="assisted">أنجز المهمة بمساعدة</label><label><input type="radio" name="utS" value="failed">لم يتمكن من إنجاز المهمة</label></div></div>
+<div><label>الوقت المستغرق (ثانية)</label><input id="utSecs" type="number" min="0" step="1"></div>
+<div><label>عدد الأخطاء / المحاولات غير الصحيحة</label><input id="utErr" type="number" min="0" step="1"></div>
+<div class="full card" style="margin:0"><b>مؤقّت المراقب:</b> <span class="sw" id="swv">00:00</span> <button class="btn sec" type="button" id="swGo">بدء</button> <button class="btn sec" type="button" id="swStop">إيقاف</button> <button class="btn sec" type="button" id="swReset">تصفير</button> <button class="btn sec" type="button" id="swUse">استخدام الوقت</button></div>
+<div class="full"><label>ملاحظات المراقب</label><input id="utNote" placeholder="ما الذي حدث؟ أين تردد المشارك؟ ما نوع المساعدة إن وُجدت؟"></div>
+<div class="full"><button class="btn" type="submit" style="width:100%">حفظ السجل</button><div class="msg" id="utMsg"></div></div></div></form></div>
+<div class="panel"><h2>لوحة النتائج</h2><div id="utDash"></div></div>
+<div class="panel"><h2>التقرير والسجل</h2><div id="utRep"></div>
+<div class="ctrl"><button class="btn" type="button" id="exCsv">تصدير CSV</button><button class="btn" type="button" id="exXlsx">تصدير Excel</button><button class="btn sec" type="button" id="utClear">مسح كل السجلات</button></div><div class="msg" id="utExMsg"></div>
+<div class="note">تُحفظ السجلات في متصفح هذا الجهاز فقط (قد تضيع عند مسح بيانات المتصفح)، لذلك صدّر الملف بعد كل جلسة للتوثيق والمراجعة.</div></div>
+</div>
+<div class="note" id="cpfNote">المخرجات المعروضة في المراحل 10–12 محاكاة لأغراض العرض فقط، والشخصيات وأوزان الدرجة قابلة للتعديل.</div>
+</div>
+
+<div id="uxMode" style="display:none">
+<div class="panel" style="min-height:0">
+  <h2>اختبار قابلية الاستخدام – Usability Testing</h2>
+  <div class="sub">المؤشر الرئيسي لمشروع SURGE CUP 2026: قدرة أخصائي التحصيل على إنجاز المهام الأساسية بالنموذج الأولي دون مساعدة.</div>
+  <div class="card"><b>الإعداد:</b> 3 أخصائيي تحصيل على الأقل × 3 مهام = 9 محاولات مستهدفة. هذا الوضع مستقل: لا يغيّر وظائف CPF ولا معادلات التصنيف ولا الأوزان ولا قواعد المحرك. لا توجد أي نتائج أو مشاركين مُدخلين مسبقًا؛ كل سجل يدخله المراقب يدويًا بعد التنفيذ الفعلي.</div>
+
+  <h3 class="s">المهام والوظائف المتاحة في النموذج الأولي</h3>
+  <div class="tw"><table>
+   <tr><th>المهمة</th><th>نص المهمة للمشارك</th><th>الوظيفة في التطبيق</th><th>التوفر</th></tr>
+   <tr><td>1</td><td>أدخل بيانات حالة عميل متعثر وشغّل التحليل.</td><td>الشاشة 1: النموذج وزر «حفظ وبدء الدورة الآلية»</td><td><span class="tag t-ok">متاحة</span></td></tr>
+   <tr><td>2</td><td>حدد الشخصية الناتجة واقرأ سبب تصنيفها.</td><td>الشاشتان 5 و6 (المطابقة والدرجة) مع الشاشة 4 (الأبعاد)</td><td><span class="tag t-w">متاحة جزئيًا</span><br><small>النتيجة والدرجة ودرجات الأبعاد معروضة، ولا يوجد نص تبرير مكتوب مستقل للتصنيف.</small></td></tr>
+   <tr><td>3</td><td>حدد الإجراء المقترح وسبب اختياره.</td><td>الشاشة 9 (التوصية) مع الشاشة 8 (القواعد المفعّلة)</td><td><span class="tag t-ok">متاحة</span></td></tr>
+  </table></div>
+  <div class="ctrl"><button class="btn" id="openProto" type="button">فتح النموذج الأولي للمشارك</button>
+   <span class="note">المؤقت أعلاه يعمل في الوضعين؛ عند إيقافه يُنقل الزمن تلقائيًا إلى حقل الثواني.</span></div>
+
+  <h3 class="s">تسجيل محاولة (يدخلها المراقب بعد انتهاء المهمة)</h3>
+  <form id="fRec">
+   <div class="grid">
+    <div><label>اسم المراقب</label><input id="obs"></div>
+    <div><label>رمز المشارك</label><select id="fP"></select></div>
+    <div><label>المهمة</label><select id="fT"><option value="T1">المهمة 1: إدخال البيانات وتشغيل التحليل</option><option value="T2">المهمة 2: الشخصية الناتجة ومبرراتها</option><option value="T3">المهمة 3: التوصية وأسبابها</option></select></div>
+    <div><label>حالة النتيجة</label><select id="fSt" required><option value="" disabled selected>اختر…</option><option value="ok">1) أنجز بنجاح دون مساعدة</option><option value="help">2) أنجز بمساعدة</option><option value="fail">3) لم يتمكن من الإنجاز</option></select></div>
+    <div><label>الوقت المستغرق (ثانية)</label><input id="fSec" type="number" min="0" step="1" required></div>
+    <div><label>عدد الأخطاء / المحاولات غير الصحيحة</label><input id="fErr" type="number" min="0" step="1" required></div>
+    <div class="full"><label>ملاحظات المراقب</label><textarea id="fNote" rows="2"></textarea></div>
+    <div class="full"><label style="font-weight:400"><input type="checkbox" id="fConf"> أؤكد أن المشارك أخصائي تحصيل فعلي وأن النتيجة من ملاحظة مباشرة للتنفيذ</label></div>
+    <div class="full ctrl"><button class="btn" type="submit">حفظ المحاولة</button><button class="btn sec" id="addP" type="button">+ إضافة مشارك</button></div>
+   </div>
+  </form>
+  <div class="msg" id="msg"></div>
+
+  <h3 class="s">لوحة النتائج</h3>
+  <div id="dash"></div>
+  <h3 class="s">أداء كل مشارك</h3><div class="tw" id="tP"></div>
+  <h3 class="s">نتائج كل مهمة</h3><div class="tw" id="tT"></div>
+  <h3 class="s">سجل المحاولات</h3><div class="tw" id="tR"></div>
+
+  <h3 class="s">التقرير النهائي</h3>
+  <div class="ctrl"><button class="btn" id="xCsv" type="button">تصدير CSV</button><button class="btn" id="xXls" type="button">تصدير Excel</button><button class="btn sec" id="wipe" type="button">مسح كل السجلات</button></div>
+  <textarea id="csvOut" rows="6" readonly style="display:none;direction:ltr"></textarea>
+  <div class="note">السجلات محفوظة في متصفح هذا الجهاز فقط؛ صدّر التقرير بعد انتهاء الجلسات للاحتفاظ بنسخة قابلة للمراجعة.</div>
+</div>
+</div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const fmt=n=>Number(n).toLocaleString('ar-SA');
+const clamp=x=>Math.max(0,Math.min(100,Math.round(x)));
+const PERSONAS=[
+ ['CP-01','متعثر مؤقتًا وراغب في السداد'],['CP-02','راغب بلا قدرة حالية'],['CP-03','قادر ومماطل'],['CP-04','منقطع التواصل'],
+ ['CP-05','كثير الوعود قليل الوفاء'],['CP-06','يحتاج إعادة جدولة / هيكلة'],['CP-07','متنازع أو تحت إجراء قانوني'],['CP-08','مرتفع المخاطر / مشطوب']];
+const ACTIONS={
+ 'CP-01':['تذكير ودي مع رابط سداد فوري','رسالة نصية + اتصال لطيف','SMS + اتصال'],
+ 'CP-02':['عرض تسوية مخفضة مع جدولة طويلة','اتصال من محصل متخصص','اتصال + عرض رقمي'],
+ 'CP-03':['إنذار رسمي مع مهلة قصيرة','اتصال حازم + إشعار مكتوب','اتصال + خطاب'],
+ 'CP-04':['محاولة وصول عبر قنوات بديلة','رسالة + مراسلة جهة اتصال بديلة','قنوات متعددة'],
+ 'CP-05':['وعد موثق بدفعة مقدمة صغيرة','اتصال متابعة قبل الاستحقاق بيوم','اتصال + تذكير'],
+ 'CP-06':['عرض إعادة هيكلة مع إشعار تفاعلي','اتصال محصل + عرض رقمي','عرض رقمي + اتصال'],
+ 'CP-07':['إيقاف التواصل التلقائي وإحالة للقانونية','مراجعة من مشرف','داخلي'],
+ 'CP-08':['مراجعة المحفظة المشطوبة وتحديد أولوية الاسترداد','إحالة لفريق الاسترداد','داخلي']};
+let D,C,timer,paused,idx,html,names;
+
+function collect(){
+  const v=id=>$(id).value;
+  return {name:v('name'),acc:v('acc'),prod:v('prod'),debt:+v('debt'),late:+v('late'),wo:v('wo'),lastpay:+v('lastpay'),prom:v('prom'),resp:v('resp'),inc:v('inc'),legal:v('legal'),pf:v('pf')};
+}
+function analyze(d){
+  const cap=d.inc==='stable'?80:d.inc==='irr'?50:15;
+  const will=(d.resp==='good'?75:d.resp==='part'?50:15)+(d.prom==='kept'?20:d.prom==='broken'?-10:0);
+  const rec=clamp(100-d.lastpay*12);
+  const aging=clamp(100-d.late*0.9);
+  const dims=[['المالية (القدرة)',clamp(cap)],['السلوكية (الاستعداد)',clamp(will)],['التفاعلية (الاستجابة)',d.resp==='good'?85:d.resp==='part'?50:12],
+    ['الديموغرافية',65],['التحصيلية (حداثة السداد)',rec],['القانونية',d.legal==='yes'?20:90],['الزمنية (عمر التأخر)',aging]];
+  const sc=[
+   (cap>60?30:10)+will*.4+aging*.3,
+   (cap<40?45:10)+(will>50?35:5)+(d.legal==='no'?10:0),
+   (cap>=70?45:5)+(will<45?30:5)+(d.resp!=='good'?10:0),
+   (d.resp==='none'?70:10)+(d.lastpay>=6?15:0),
+   (d.prom==='broken'?60:8)+(d.resp!=='none'?15:0)+(d.late>30?8:0),
+   (cap>=40&&cap<75?30:8)+(will>=45?25:8)+(d.late>=60?20:5)+(d.debt>=20000?12:3),
+   d.legal==='yes'?92:5,
+   (d.wo==='yes'?90:6)+(d.late>=180?15:0)];
+  const scores=sc.map(clamp);
+  let top=0;scores.forEach((s,i)=>{if(s>scores[top])top=i});
+  if(d.legal==='yes')top=6; if(d.wo==='yes')top=7;
+  const ready=[
+   ['اكتمال البيانات الأساسية',d.name&&d.acc&&d.debt>0],
+   ['حداثة بيانات السداد (آخر 6 أشهر)',d.lastpay<=6],
+   ['حالة الحساب قابلة للتحصيل',d.wo!=='yes'],
+   ['لا وعود قائمة معلّقة',d.prom!=='broken'||true],
+   ['لا إجراء قانوني معلّق',d.legal!=='yes']];
+  const rp=Math.round(ready.filter(r=>r[1]).length/ready.length*100);
+  return {dims,scores,top,ready,rp,score:scores[top]};
+}
+const events=d=>[[d.late+30,'فتح الحساب / آخر قسط منتظم'],[d.late,'أول تأخر عن السداد'],[Math.max(d.lastpay*30,1),'آخر سداد مسجل'],[Math.max(Math.round(d.late/2),1),'محاولة تواصل أولى'],[7,'وعد سداد مسجل: '+({none:'لا يوجد',broken:'لم يُوفَ به',kept:'تم الوفاء به'}[d.prom])]].sort((a,b)=>b[0]-a[0]);
+
+const ST=[
+ {n:'الإدخال',t:'استلام البيانات',en:'Data Intake'},
+ {n:'التوحيد',t:'توحيد المصادر',en:'Data Unification',r:()=>{
+   const rows=[['اسم العميل',D.name],['رقم الحساب',D.acc],['المنتج',D.prod],['المديونية',fmt(D.debt)+' ريال'],['أيام التأخر',D.late],['حالة الحساب',D.wo==='yes'?'مشطوب':'قائم'],['المحفظة',D.pf]];
+   return `<div class="card">تم ربط الحقول وتوحيد الصيغ ومعالجة التكرار. لا تعارضات بين المصادر.</div><div class="tw"><table><tr><th>الحقل</th><th>القيمة الموحدة</th><th>التحقق</th></tr>${rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td><span class="tag t-ok">✓</span></td></tr>`).join('')}</table></div>
+   <h3 style="font-size:.95rem">السجل الزمني الموحد</h3><div class="tw"><table>${events(D).map(e=>`<tr><td>قبل ${e[0]} يومًا</td><td>${e[1]}</td></tr>`).join('')}</table></div>`}},
+ {n:'الفهم',t:'بناء فهم العميل',en:'Customer Understanding',r:()=>`<div class="card"><b>الوضع المالي:</b> مديونية ${fmt(D.debt)} ريال على ${D.prod}، متأخرة ${D.late} يومًا، والدخل ${({stable:'مستقر',irr:'غير منتظم',none:'غير متوفر حاليًا'})[D.inc]}.</div>
+   <div class="card"><b>تاريخ السداد:</b> آخر سداد قبل ${D.lastpay} أشهر، والوعود السابقة: ${({none:'لا توجد',broken:'غير موفى بها',kept:'موفى بها'})[D.prom]}.</div>
+   <div class="card"><b>الاستجابة للتواصل:</b> ${({good:'تستجيب بانتظام',part:'استجابة جزئية',none:'لا تستجيب'})[D.resp]}. ${D.legal==='yes'?'<b>تنبيه:</b> هناك إجراء تنفيذي قائم.':''}</div>`},
+ {n:'الأبعاد',t:'تحليل أبعاد العميل',en:'Dimensions Analysis',r:()=>`<div class="card">${C.dims.map(d=>`<div class="row"><span class="n">${d[0]}</span><div class="bar"><i style="width:${d[1]}%"></i></div><span class="v">${d[1]}</span></div>`).join('')}</div><div class="note">سبعة أبعاد تُغذّي مطابقة الشخصية ودرجتها.</div>`},
+ {n:'المطابقة',t:'مطابقة الشخصية',en:'Persona Matching',r:()=>`<div class="card">${PERSONAS.map((p,i)=>`<div class="row"><span class="n">${p[0]} ${p[1]}</span><div class="bar"><i class="${i===C.top?'top':''}" style="width:${C.scores[i]}%"></i></div><span class="v">${C.scores[i]}</span></div>`).join('')}</div><div class="card"><b>الشخصية المتوافقة:</b> ${PERSONAS[C.top][0]} – ${PERSONAS[C.top][1]}</div>`},
+ {n:'الدرجة',t:'درجة الشخصية',en:'Persona Score',r:()=>{const b=C.score>=75?['مطابقة عالية','t-ok']:C.score>=50?['مطابقة متوسطة','t-w']:['مطابقة منخفضة – تحتاج مراجعة','t-b'];return `<div class="card" style="text-align:center"><div class="big">${C.score}<small style="font-size:1rem"> / 100</small></div><span class="tag ${b[1]}">${b[0]}</span><p>الشخصية: ${PERSONAS[C.top][0]} – ${PERSONAS[C.top][1]}</p></div>`}},
+ {n:'الجاهزية',t:'التحقق من جاهزية القرار',en:'Decision Readiness',r:()=>`<div class="card">${C.ready.map(r=>`<div class="row"><span class="tag ${r[1]?'t-ok':'t-b'}">${r[1]?'✓':'✗'}</span><span>${r[0]}</span></div>`).join('')}</div><div class="card" style="text-align:center"><div class="big">${C.rp}%</div>${C.rp>=80?'جاهز لاتخاذ القرار':'يحتاج مراجعة قبل التنفيذ'}</div>`},
+ {n:'المحرك',t:'محرك القرار',en:'Decision Engine',r:()=>{const rules=[];
+   if(D.legal==='yes')rules.push('R1: إجراء تنفيذي قائم ← إيقاف التواصل التلقائي ومراجعة بشرية');
+   if(D.wo==='yes')rules.push('R2: حساب مشطوب ← مسار الاسترداد');
+   if(D.resp==='none')rules.push('R3: لا استجابة ← قنوات بديلة');
+   if(D.prom==='broken')rules.push('R4: وعد غير موفى ← اشتراط دفعة مقدمة');
+   if(D.late>=60&&D.legal!=='yes')rules.push('R5: تأخر ≥ 60 يومًا ← تفضيل عرض هيكلة / تسوية');
+   rules.push('R6: الشخصية '+PERSONAS[C.top][0]+' بدرجة '+C.score+' ← اختيار المسار المناسب');
+   return `<div class="card"><b>القواعد المُفعَّلة:</b><ul>${rules.map(r=>`<li>${r}</li>`).join('')}</ul></div><div class="card"><b>المسار المحدد:</b> ${ACTIONS[PERSONAS[C.top][0]][1]}</div>`}},
+ {n:'التوصية',t:'أفضل إجراء تحصيلي تالٍ',en:'Next Best Action',r:()=>{const a=ACTIONS[PERSONAS[C.top][0]];return `<div class="card" style="border-color:var(--acc)"><span class="tag t-ok">التوصية</span><h3 style="margin:8px 0">${a[0]}</h3><div>القناة المقترحة: ${a[2]}</div><div>الأساس: ${PERSONAS[C.top][0]} – درجة ${C.score} – جاهزية ${C.rp}%</div></div>`}},
+ {n:'التنفيذ',t:'التنفيذ والتوثيق',en:'Execution',r:()=>{const a=ACTIONS[PERSONAS[C.top][0]];const dt=new Date().toLocaleDateString('ar-SA');return `<div class="tw"><table><tr><th>التاريخ</th><th>الإجراء</th><th>القناة</th><th>النتيجة (محاكاة)</th></tr><tr><td>${dt}</td><td>${a[0]}</td><td>${a[2]}</td><td>تم الإرسال / التنفيذ</td></tr></table></div><div class="card" style="margin-top:10px">وعد السداد المسجل: دفعة أولى خلال 7 أيام (محاكاة).</div>`}},
+ {n:'القياس',t:'قياس النتائج',en:'Outcome Measurement',r:()=>{const paid=Math.round(D.debt*0.1);return `<div class="kpis"><div class="kpi"><b>${fmt(paid)}</b><span>المبلغ المحصل (ريال)</span></div><div class="kpi"><b>${D.resp==='none'?'0%':'100%'}</b><span>معدل الاستجابة</span></div><div class="kpi"><b>${D.prom==='broken'?'50%':'100%'}</b><span>الالتزام بالوعود</span></div><div class="kpi"><b>${C.rp>=80?'عالية':'متوسطة'}</b><span>كفاءة الإجراء</span></div></div><div class="note">قيم محاكاة لأغراض العرض.</div>`}},
+ {n:'التحديث',t:'التعلّم والتحديث',en:'Learning & Update',r:()=>`<div class="card">✓ تم تحديث سجل العميل ${D.acc} بنتيجة الإجراء.</div><div class="card">✓ مراجعة الشخصية: بقاء ${PERSONAS[C.top][0]} مع درجة ${Math.min(100,C.score+2)} بعد الدورة.</div><div class="card">✓ تغذية محرك القرار بنتيجة الدورة لتحسين القواعد في الدورات اللاحقة.</div>`}
+];
+
+function buildStepper(){$('stepper').innerHTML=ST.map((s,i)=>`<div class="st" id="st${i}">${i+1}. ${s.n}</div>`).join('');
+  ST.forEach((s,i)=>$('st'+i).onclick=()=>{if($('st'+i).classList.contains('done')||i===idx-1)show(i,true)})}
+function setSt(cur){ST.forEach((s,i)=>{$('st'+i).className='st'+(i<cur?' done':i===cur?' active':'')})}
+function log(m){const l=$('log');l.innerHTML+=`[${new Date().toLocaleTimeString('ar-SA')}] ${m}<br>`;l.scrollTop=l.scrollHeight}
+function show(i,review){
+  $('tt').textContent=`الشاشة ${i+1}: ${ST[i].t} | ${ST[i].en}`;
+  $('ts').textContent=review?'عرض مرحلة سابقة (انقر مرحلة أخرى أو انتظر المتابعة)':'';
+  $('body').innerHTML=html[i]||'';$('body').className='';void $('body').offsetWidth;$('body').className='fade';
+  document.querySelectorAll('.st').forEach(e=>e.classList.remove('view'));if(review)$('st'+i).classList.add('view');
+}
+function step(){
+  clearTimeout(timer);
+  if(idx>=ST.length){finish();return}
+  const i=idx;
+  html[i]=ST[i].r();setSt(i);show(i,false);
+  if(i===1)$('hReady').textContent='جارٍ الفحص';
+  if(i===6)$('hReady').textContent=C.rp+'%';
+  log(`اكتملت المرحلة ${i+1}: ${ST[i].t}`);
+  idx++;
+  if(!paused)timer=setTimeout(step,+$('spd').value);
+}
+function finish(){setSt(ST.length);$('sys').textContent='اكتملت الدورة';$('dot').className='dot';$('ts').textContent='✅ اكتملت الدورة الآلية للمراحل الـ 12. يمكنك مراجعة أي مرحلة بالنقر عليها.';$('pause').disabled=true;$('next').disabled=true;log('انتهت الدورة')}
+function start(e){
+  e.preventDefault();D=collect();C=analyze(D);
+  $('s1').style.display='none';$('auto').style.display='block';
+  $('hAcc').textContent=D.acc;$('hDebt').textContent=fmt(D.debt)+' ريال';$('hReady').textContent='—';
+  $('sys').textContent='معالجة تتابع آلي';$('dot').className='dot run';
+  html=[];idx=1;paused=false;$('log').innerHTML='';$('pause').textContent='إيقاف مؤقت';$('pause').disabled=false;$('next').disabled=false;
+  html[0]=`<div class="card">تم حفظ بيانات العميل <b>${D.name}</b> (${D.acc}) وبدء الدورة الآلية.</div>`;
+  log('حفظ البيانات وبدء الدورة');
+  timer=setTimeout(step,900);
+}
+$('form').addEventListener('submit',start);
+$('pause').onclick=()=>{paused=!paused;$('pause').textContent=paused?'متابعة':'إيقاف مؤقت';$('sys').textContent=paused?'متوقف مؤقتًا':'معالجة تتابع آلي';$('dot').className=paused?'dot':'dot run';if(!paused)timer=setTimeout(step,300)};
+$('next').onclick=()=>{step()};
+$('restart').onclick=()=>{clearTimeout(timer);$('auto').style.display='none';$('s1').style.display='block';buildStepper();setSt(0);$('sys').textContent='في الانتظار';$('dot').className='dot'};
+buildStepper();setSt(0);
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+(function(){
+const g=id=>document.getElementById(id);
+const KEY='cpf_ux_v1';
+const TN={T1:'المهمة 1: إدخال البيانات وتشغيل التحليل',T2:'المهمة 2: الشخصية الناتجة ومبرراتها',T3:'المهمة 3: التوصية وأسبابها'};
+const SN={ok:'أنجز بنجاح دون مساعدة',help:'أنجز بمساعدة',fail:'لم يتمكن من الإنجاز'};
+let U={obs:'',np:3,recs:[]},DL=null;
+try{const s=localStorage.getItem(KEY);if(s)U=Object.assign(U,JSON.parse(s))}catch(e){}
+const store=()=>{try{localStorage.setItem(KEY,JSON.stringify(U))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pct=(a,b)=>b?Math.round(a/b*1000)/10:null;
+const pf=v=>v===null?'—':v+'%';
+const msg=(t,bad)=>{const m=g('msg');m.textContent=t;m.style.color=bad?'var(--bad)':'var(--ok)'};
+
+function mode(m){g('cpfMode').style.display=m==='cpf'?'':'none';g('uxMode').style.display=m==='ux'?'':'none';g('tabCpf').classList.toggle('on',m==='cpf');g('tabUx').classList.toggle('on',m==='ux');window.scrollTo(0,0)}
+g('tabCpf').onclick=()=>mode('cpf');g('tabUx').onclick=()=>mode('ux');g('openProto').onclick=()=>mode('cpf');
+
+let t0=0,el=0,iv=null;
+const showT=()=>{g('tm').textContent=String(Math.floor(el/60)).padStart(2,'0')+':'+String(el%60).padStart(2,'0')};
+const tick=()=>{el=Math.round((Date.now()-t0)/1000);showT()};
+g('tStart').onclick=()=>{if(iv)return;t0=Date.now()-el*1000;iv=setInterval(tick,250)};
+g('tStop').onclick=()=>{if(!iv)return;clearInterval(iv);iv=null;tick();g('fSec').value=el};
+g('tReset').onclick=()=>{clearInterval(iv);iv=null;el=0;showT()};
+
+function stats(rs){const n=rs.length,ok=rs.filter(r=>r.st==='ok').length,h=rs.filter(r=>r.st==='help').length,f=rs.filter(r=>r.st==='fail').length;
+  return{n,ok,h,f,rate:pct(ok,n),sec:rs.reduce((a,r)=>a+r.sec,0),err:rs.reduce((a,r)=>a+r.err,0)}}
+const plist=()=>Array.from({length:Math.max(3,U.np)},(_,i)=>'P'+(i+1));
+
+function model(){
+  const A=stats(U.recs),parts=new Set(U.recs.map(r=>r.p)).size,complete=A.n>=9&&parts>=3;
+  let tag,txt;
+  if(!A.n){tag='t-w';txt='لم يبدأ الاختبار'}
+  else if(!complete){tag='t-w';txt='الاختبار غير مكتمل'}
+  else if(A.rate>=80){tag='t-ok';txt='تحقق'}else{tag='t-b';txt='لم يتحقق'}
+  const N=Math.max(A.n,9),need=Math.ceil(N*0.8);
+  const P=[['رمز المشارك','المهام المسجلة','دون مساعدة','بمساعدة','غير منجزة','نسبة النجاح','إجمالي الزمن (ث)','الأخطاء']];
+  plist().forEach(p=>{const s=stats(U.recs.filter(r=>r.p===p));P.push([p,s.n,s.ok,s.h,s.f,pf(s.rate),s.sec,s.err])});
+  const T=[['المهمة','المحاولات','دون مساعدة','بمساعدة','غير منجزة','نسبة النجاح','متوسط الزمن (ث)','الأخطاء']];
+  Object.keys(TN).forEach(k=>{const s=stats(U.recs.filter(r=>r.t===k));T.push([TN[k],s.n,s.ok,s.h,s.f,pf(s.rate),s.n?Math.round(s.sec/s.n*10)/10:'—',s.err])});
+  const R=[['رمز المشارك','المهمة','حالة النتيجة','الوقت (ث)','الأخطاء','ملاحظات المراقب','وقت التسجيل (ISO)']];
+  U.recs.forEach(r=>R.push([r.p,TN[r.t],SN[r.st],r.sec,r.err,r.note,r.ts]));
+  const S=[['المؤشر','نسبة إتمام أخصائيي التحصيل للمهام الأساسية باستخدام النموذج الأولي لـ CPF دون الحاجة إلى مساعدة'],
+   ['المعادلة','المهام المنجزة بنجاح دون مساعدة ÷ إجمالي المهام المختبرة × 100'],['الهدف','80% على الأقل'],
+   ['المراقب',U.obs||'—'],['تاريخ التقرير',new Date().toISOString().slice(0,10)],
+   ['عدد المشاركين',parts],['إجمالي المهام المختبرة',A.n],['منجزة دون مساعدة',A.ok],['منجزة بمساعدة',A.h],['غير منجزة',A.f],
+   ['نسبة النجاح',pf(A.rate)],['الفرق عن الهدف (نقطة مئوية)',A.n?Math.round((A.rate-80)*10)/10:'—'],['حالة المؤشر',txt]];
+  if(A.n&&!complete)S.push(['ملاحظة','النسبة مؤقتة: المطلوب 3 مشاركين و9 محاولات على الأقل (المسجل: '+parts+' مشاركين، '+A.n+' محاولات)']);
+  return{A,parts,complete,tag,txt,need,N,P,T,R,S}
+}
+const tbl=rows=>'<table><tr>'+rows[0].map(h=>`<th>${esc(h)}</th>`).join('')+'</tr>'+rows.slice(1).map(r=>'<tr>'+r.map(c=>`<td>${esc(c)}</td>`).join('')+'</tr>').join('')+'</table>';
+
+function csv(m){
+  const q=c=>'"'+String(c).replace(/"/g,'""')+'"';
+  const sec=(t,rows)=>[q(t)].concat(rows.map(r=>r.map(q).join(','))).join('\r\n');
+  return '\uFEFF'+[sec('الملخص',m.S),sec('أداء المشاركين',m.P),sec('نتائج المهام',m.T),sec('سجل المحاولات',m.R)].join('\r\n\r\n')
+}
+
+function render(){
+  const m=model(),A=m.A;
+  const cur=g('fP').value;
+  g('fP').innerHTML=plist().map(p=>`<option>${p}</option>`).join('');if(cur)g('fP').value=cur;
+  g('obs').value=U.obs||'';
+  g('dash').innerHTML=`<div class="kpis">
+   <div class="kpi"><b>${m.parts}</b><span>عدد المشاركين (المطلوب 3+)</span></div>
+   <div class="kpi"><b>${A.n}</b><span>إجمالي المهام المختبرة (المستهدف 9)</span></div>
+   <div class="kpi"><b>${A.ok}</b><span>منجزة دون مساعدة</span></div>
+   <div class="kpi"><b>${A.h}</b><span>منجزة بمساعدة</span></div>
+   <div class="kpi"><b>${A.f}</b><span>غير منجزة</span></div>
+   <div class="kpi"><b>${pf(A.rate)}</b><span>نسبة النجاح النهائية</span></div></div>
+   <div class="card" style="margin-top:10px">
+    <div class="row"><span class="n">النتيجة مقابل الهدف 80%</span><div class="bar" style="position:relative"><i class="${A.rate>=80?'top':''}" style="width:${A.rate||0}%"></i><span style="position:absolute;inset-inline-start:80%;top:-3px;height:16px;border-inline-start:2px solid var(--bad)"></span></div><span class="v">${pf(A.rate)}</span></div>
+    <div>حالة المؤشر: <span class="tag ${m.tag}">${m.txt}</span></div>
+    <div class="note">الحد الأدنى للنجاح عند ${m.N} محاولات: ${m.need} محاولات دون مساعدة.${A.n&&!m.complete?' النسبة الحالية مؤقتة حتى اكتمال 3 مشاركين و9 محاولات.':''}</div></div>`;
+  g('tP').innerHTML=tbl(m.P);g('tT').innerHTML=tbl(m.T);
+  g('tR').innerHTML=U.recs.length?'<table><tr><th>المشارك</th><th>المهمة</th><th>النتيجة</th><th>الوقت (ث)</th><th>الأخطاء</th><th>الملاحظات</th><th></th></tr>'+U.recs.map(r=>`<tr><td>${r.p}</td><td>${esc(TN[r.t])}</td><td>${SN[r.st]}</td><td>${r.sec}</td><td>${r.err}</td><td>${esc(r.note)||'—'}</td><td><button type="button" class="btn sec mini" data-del="${r.id}">حذف</button></td></tr>`).join('')+'</table>':'<div class="note">لا توجد محاولات مسجلة بعد.</div>';
+  g('csvOut').value=csv(m);
+}
+
+g('fRec').addEventListener('submit',e=>{
+  e.preventDefault();
+  const p=g('fP').value,t=g('fT').value;
+  if(!g('fConf').checked){msg('أكّد أن المشارك أخصائي تحصيل فعلي قبل الحفظ',1);return}
+  if(U.recs.some(r=>r.p===p&&r.t===t)){msg('يوجد سجل لهذا المشارك والمهمة. احذفه أولًا إن أردت تصحيحه.',1);return}
+  U.obs=g('obs').value.trim();
+  U.recs.push({id:Date.now(),p,t,st:g('fSt').value,sec:Math.round(+g('fSec').value),err:Math.round(+g('fErr').value),note:g('fNote').value.trim(),ts:new Date().toISOString()});
+  store();
+  ['fSt','fSec','fErr','fNote'].forEach(i=>g(i).value='');g('fConf').checked=false;
+  clearInterval(iv);iv=null;el=0;showT();
+  render();msg('تم حفظ المحاولة ('+p+' – '+TN[t].split(':')[0]+')');
+});
+g('obs').addEventListener('change',()=>{U.obs=g('obs').value.trim();store();render()});
+g('addP').onclick=()=>{U.np=Math.max(3,U.np)+1;store();render();g('fP').value='P'+U.np;msg('أضيف المشارك P'+U.np)};
+
+let armed=null;
+function arm(btn,label,fn){
+  if(armed&&armed.b===btn){clearTimeout(armed.t);btn.textContent=armed.l;armed=null;fn();return}
+  if(armed){clearTimeout(armed.t);armed.b.textContent=armed.l}
+  armed={b:btn,l:btn.textContent,t:setTimeout(()=>{btn.textContent=armed.l;armed=null},4000)};btn.textContent=label;
+}
+g('tR').addEventListener('click',e=>{const b=e.target.closest('[data-del]');if(!b)return;arm(b,'تأكيد الحذف؟',()=>{U.recs=U.recs.filter(r=>String(r.id)!==b.dataset.del);store();render();msg('تم حذف السجل')})});
+g('wipe').onclick=()=>arm(g('wipe'),'تأكيد المسح؟',()=>{U.recs=[];U.np=3;store();render();msg('تم مسح كل السجلات')});
+
+async function exp(kind){
+  if(!U.recs.length){msg('لا توجد نتائج مسجلة لتصديرها',1);return}
+  const m=model(),d=new Date().toISOString().slice(0,10);
+  try{
+    if(kind==='csv')await DL.save({filename:`cpf-usability-report-${d}.csv`,data:csv(m)});
+    else{
+      const wb=XLSX.utils.book_new();
+      [['الملخص',m.S],['المشاركون',m.P],['المهام',m.T],['السجلات',m.R]].forEach(([n,r])=>XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(r),n));
+      wb.Workbook={Views:[{RTL:true}]};
+      await DL.save({filename:`cpf-usability-report-${d}.xlsx`,data:XLSX.write(wb,{bookType:'xlsx',type:'array'})});
+    }
+    msg('تم تجهيز الملف');
+  }catch(err){msg(err&&err.code==='declined'?'تم إلغاء الحفظ':'تعذر التصدير: '+((err&&err.message)||''),1)}
+}
+g('xCsv').onclick=()=>exp('csv');
+g('xXls').onclick=()=>{if(!window.XLSX){msg('مكتبة Excel غير متاحة؛ استخدم CSV',1);return}exp('xlsx')};
+(async()=>{try{DL=await window.claude.use('downloads')}catch(e){}
+  if(!DL){g('xCsv').style.display='none';g('xXls').style.display='none';g('csvOut').style.display='block'}})();
+render();
+})();
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+(function(){
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const KEY='cpf_usability_v1',TARGET=80,PLAN=9;
+const TASKS=[
+ {t:'إدخال بيانات حالة عميل متعثر وإكمال الحقول المطلوبة وتشغيل التحليل',w:'الشاشة 1 ← زر «حفظ وبدء الدورة الآلية»',ok:true,n:'متاحة: تعمل الدورة الآلية فور الحفظ.'},
+ {t:'الوصول إلى الشخصية التحصيلية الناتجة وقراءة التصنيف ومبرراته',w:'المرحلتان 5 و6 (مطابقة الشخصية ودرجتها) مع المرحلة 4 (الأبعاد)',ok:true,n:'متاحة جزئيًا: يعرض التطبيق الشخصية ودرجات التطابق وقيم الأبعاد، ولا يوجد نص تفسيري مستقل لمبررات التصنيف.'},
+ {t:'الوصول إلى التوصية التحصيلية وفهم الإجراء المقترح وأسباب اختياره',w:'المرحلة 9 (أفضل إجراء تالٍ) مع المرحلة 8 (القواعد المُفعَّلة)',ok:true,n:'متاحة: تعرض المرحلة 9 الإجراء والقناة والأساس، وتعرض المرحلة 8 القواعد المُفعَّلة.'}];
+const LBL={success:'أنجز بنجاح دون مساعدة',assisted:'أنجز بمساعدة',failed:'لم يتمكن من الإنجاز'};
+const SH={success:'نجاح',assisted:'بمساعدة',failed:'فشل'};
+let recs=[];
+try{recs=JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){recs=[]}
+const persist=()=>{try{localStorage.setItem(KEY,JSON.stringify(recs));return true}catch(e){return false}};
+const pct=(a,b)=>b?Math.round(a/b*1000)/10:0;
+function stats(){const parts=[...new Set(recs.map(r=>r.p))].sort();const c=s=>recs.filter(r=>r.s===s).length;const total=recs.length,ok=c('success');
+ return {parts,total,ok,as:c('assisted'),fl:c('failed'),rate:pct(ok,total),complete:parts.length>=3&&total>=PLAN}}
+function status(st){if(!st.total)return 'لا توجد بيانات بعد';if(!st.complete)return 'غير نهائي – الاختبار لم يكتمل';return st.rate>=TARGET?'تحقق':'لم يتحقق'}
+function byPart(){return stats().parts.map(p=>{const r=recs.filter(x=>x.p===p);const ok=r.filter(x=>x.s==='success').length;const g=t=>{const x=r.find(y=>y.t===t);return x?SH[x.s]:'—'};
+ return [p,g(1),g(2),g(3),r.length,ok,pct(ok,r.length),r.reduce((a,x)=>a+x.secs,0),r.reduce((a,x)=>a+x.err,0)]})}
+function byTask(){return TASKS.map((k,i)=>{const r=recs.filter(x=>x.t===i+1);const ok=r.filter(x=>x.s==='success').length;
+ return ['المهمة '+(i+1)+': '+k.t,r.length,ok,r.filter(x=>x.s==='assisted').length,r.filter(x=>x.s==='failed').length,pct(ok,r.length),r.length?Math.round(r.reduce((a,x)=>a+x.secs,0)/r.length):0,r.reduce((a,x)=>a+x.err,0)]})}
+const H1=['رمز المشارك','المهمة 1','المهمة 2','المهمة 3','المحاولات','الناجحة دون مساعدة','نسبة النجاح %','إجمالي الوقت (ث)','إجمالي الأخطاء'];
+const H2=['المهمة','المحاولات','نجاح دون مساعدة','بمساعدة','لم تُنجز','نسبة النجاح %','متوسط الوقت (ث)','إجمالي الأخطاء'];
+const table=(h,rows)=>'<div class="tw"><table><tr>'+h.map(x=>'<th>'+x+'</th>').join('')+'</tr>'+rows.map(r=>'<tr>'+r.map(x=>'<td>'+esc(x)+'</td>').join('')+'</tr>').join('')+'</table></div>';
+function render(){
+ const st=stats(),s=status(st);
+ const col=!st.total?'':!st.complete?'t-w':st.rate>=TARGET?'t-ok':'t-b';
+ $('utDash').innerHTML='<div class="kpis"><div class="kpi"><b>'+st.parts.length+'</b><span>عدد المشاركين</span></div><div class="kpi"><b>'+st.total+' / '+PLAN+'</b><span>إجمالي المهام المختبرة</span></div><div class="kpi"><b>'+st.ok+'</b><span>أُنجزت دون مساعدة</span></div><div class="kpi"><b>'+st.as+'</b><span>أُنجزت بمساعدة</span></div><div class="kpi"><b>'+st.fl+'</b><span>لم تُنجز</span></div><div class="kpi"><b>'+(st.total?st.rate+'%':'—')+'</b><span>نسبة النجاح'+(st.complete?'':' (مؤقتة)')+'</span></div></div>'+
+ '<div class="mark"><i style="width:'+st.rate+'%"></i><b style="inset-inline-start:'+TARGET+'%"></b></div><div class="note">الخط الأحمر = الهدف '+TARGET+'%. النسبة = المهام المنجزة بنجاح دون مساعدة ÷ إجمالي المهام المختبرة × 100.</div>'+
+ '<div class="card"><div class="row"><span class="n">المقارنة بالهدف</span><span>'+(st.total?(st.rate>=TARGET?'أعلى من الهدف أو مساوٍ له':'أقل من الهدف')+' ('+st.rate+'% مقابل '+TARGET+'%)':'—')+'</span></div><div class="row"><span class="n">حالة المؤشر</span>'+(col?'<span class="tag '+col+'">'+s+'</span>':'<span>'+s+'</span>')+'</div>'+(st.total&&!st.complete?'<div class="note">لا تُعدّ الحالة نهائية قبل مشاركة 3 أخصائيين على الأقل وتسجيل 9 محاولات على الأقل.</div>':'')+'</div>';
+ $('utRep').innerHTML='<h3 style="font-size:.95rem">أداء كل مشارك</h3>'+(st.total?table(H1,byPart()):'<div class="note">لا توجد سجلات.</div>')+'<h3 style="font-size:.95rem">نتائج كل مهمة</h3>'+(st.total?table(H2,byTask()):'')+'<h3 style="font-size:.95rem">سجل المحاولات</h3>'+(st.total?'<div class="tw"><table><tr><th>المشارك</th><th>المهمة</th><th>الحالة</th><th>الوقت (ث)</th><th>الأخطاء</th><th>ملاحظات المراقب</th><th>التسجيل</th><th></th></tr>'+recs.map((r,i)=>'<tr><td>'+esc(r.p)+'</td><td>'+r.t+'</td><td>'+LBL[r.s]+'</td><td>'+r.secs+'</td><td>'+r.err+'</td><td>'+esc(r.note||'—')+'</td><td>'+esc(r.ts.slice(0,16).replace('T',' '))+'</td><td><button class="btn sec" type="button" data-del="'+i+'">حذف</button></td></tr>').join('')+'</table></div>':'<div class="note">لا توجد سجلات.</div>');
+ document.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{if(b.dataset.arm){recs.splice(+b.dataset.del,1);persist();render()}else{b.dataset.arm=1;b.textContent='تأكيد؟';setTimeout(()=>{if(b.isConnected){delete b.dataset.arm;b.textContent='حذف'}},4000)}});
+}
+$('utTasks').innerHTML=TASKS.map((k,i)=>'<div class="card"><b>المهمة '+(i+1)+':</b> '+k.t+'<div class="note" style="margin-top:4px">الموضع في التطبيق: '+k.w+'<br>'+k.n+'</div></div>').join('');
+// tabs
+function mode(m){const ut=m==='ut';['stepper','panel','cpfNote'].forEach(id=>$(id).style.display=ut?'none':'');$('utMode').style.display=ut?'':'none';$('tabUt').classList.toggle('on',ut);$('tabCpf').classList.toggle('on',!ut)}
+$('tabCpf').onclick=()=>mode('cpf');$('tabUt').onclick=()=>{mode('ut');render()};$('utOpen').onclick=()=>mode('cpf');
+// stopwatch
+let swT=null,swS=0,swB=0;const swShow=()=>{$('swv').textContent=String(Math.floor(swS/60)).padStart(2,'0')+':'+String(swS%60).padStart(2,'0')};
+$('swGo').onclick=()=>{if(swT)return;swB=Date.now()-swS*1000;swT=setInterval(()=>{swS=Math.floor((Date.now()-swB)/1000);swShow()},250)};
+$('swStop').onclick=()=>{clearInterval(swT);swT=null};$('swReset').onclick=()=>{clearInterval(swT);swT=null;swS=0;swShow()};
+$('swUse').onclick=()=>{$('utSecs').value=swS};
+// form
+$('utForm').addEventListener('submit',e=>{e.preventDefault();const m=$('utMsg');m.className='msg';
+ const p=$('utP').value,t=+$('utT').value,sEl=document.querySelector('input[name=utS]:checked'),secs=$('utSecs').value,err=$('utErr').value;
+ if(!p||!t||!sEl||secs===''||err===''){m.textContent='أكمل رمز المشارك والمهمة والحالة والوقت وعدد الأخطاء.';return}
+ if(!(+secs>=0)||!(+err>=0)||!Number.isInteger(+secs)||!Number.isInteger(+err)){m.textContent='الوقت وعدد الأخطاء يجب أن يكونا أعدادًا صحيحة غير سالبة.';return}
+ if(recs.some(r=>r.p===p&&r.t===t)){m.textContent='سُجّلت هذه المهمة لهذا المشارك سابقًا. احذف السجل القديم أولًا إن أردت تصحيحه.';return}
+ recs.push({p,t,s:sEl.value,secs:+secs,err:+err,note:$('utNote').value.trim(),ts:new Date().toISOString()});
+ const saved=persist();$('utForm').reset();swS=0;clearInterval(swT);swT=null;swShow();
+ m.className='msg ok';m.textContent=saved?'تم حفظ السجل.':'تم الحفظ في هذه الجلسة فقط؛ تعذّر حفظه في المتصفح، فصدّر الملف قبل الإغلاق.';render()});
+let clr=0;$('utClear').onclick=function(){if(clr){recs=[];persist();render();clr=0;this.textContent='مسح كل السجلات'}else{clr=1;this.textContent='تأكيد المسح النهائي؟';setTimeout(()=>{clr=0;this.textContent='مسح كل السجلات'},4000)}};
+// export
+function sheets(){const st=stats(),s=status(st);
+ const rec=[['رمز المشارك','المهمة','حالة النتيجة','الوقت (ثانية)','عدد الأخطاء','ملاحظات المراقب','وقت التسجيل (UTC)']].concat(recs.map(r=>[r.p,'المهمة '+r.t+': '+TASKS[r.t-1].t,LBL[r.s],r.secs,r.err,r.note||'',r.ts]));
+ const kpi=[['المؤشر','نسبة إتمام أخصائيي التحصيل للمهام الأساسية باستخدام النموذج الأولي لـ CPF دون الحاجة إلى مساعدة'],['طريقة الحساب','المهام المنجزة بنجاح دون مساعدة ÷ إجمالي المهام المختبرة × 100'],['الهدف %',TARGET],['عدد المشاركين',st.parts.length],['إجمالي المهام المختبرة',st.total],['أُنجزت دون مساعدة',st.ok],['أُنجزت بمساعدة',st.as],['لم تُنجز',st.fl],['نسبة النجاح %',st.total?st.rate:''],['حالة المؤشر',s]];
+ return [['سجل المحاولات',rec],['أداء المشاركين',[H1].concat(byPart())],['نتائج المهام',[H2].concat(byTask())],['المؤشر الرئيسي',kpi]]}
+const csvCell=v=>{v=String(v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
+const day=()=>new Date().toISOString().slice(0,10);
+async function out(name,data,msgEl){const d=await claude.use('downloads');if(!d){msgEl.textContent='التصدير غير متاح في هذا العرض.';return}
+ try{await d.save({filename:name,data});msgEl.className='msg ok';msgEl.textContent='تم تجهيز الملف.'}catch(e){msgEl.className='msg';msgEl.textContent=e&&e.code==='declined'?'أُلغي الحفظ.':'تعذّر الحفظ.'}}
+$('exCsv').onclick=()=>{const m=$('utExMsg');if(!recs.length){m.className='msg';m.textContent='لا توجد سجلات لتصديرها.';return}
+ const txt='\ufeff'+sheets().map(([n,rows])=>csvCell(n)+'\n'+rows.map(r=>r.map(csvCell).join(',')).join('\n')).join('\n\n');
+ out('cpf-usability-'+day()+'.csv',new Blob([txt],{type:'text/csv;charset=utf-8'}),m)};
+$('exXlsx').onclick=()=>{const m=$('utExMsg');if(!recs.length){m.className='msg';m.textContent='لا توجد سجلات لتصديرها.';return}
+ if(typeof XLSX==='undefined'){m.className='msg';m.textContent='مكتبة Excel لم تُحمَّل؛ استخدم CSV.';return}
+ const wb=XLSX.utils.book_new();sheets().forEach(([n,rows])=>XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(rows),n));wb.Workbook={Views:[{RTL:true}]};
+ const buf=XLSX.write(wb,{bookType:'xlsx',type:'array'});out('cpf-usability-'+day()+'.xlsx',new Blob([buf],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}),m)};
+render();
+})();
+</script>
+</body>
+</html>
